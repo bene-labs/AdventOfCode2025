@@ -1,7 +1,8 @@
-﻿def day1(path: str, count_all_zeros: bool)->int:
+﻿
+def day1(input_path: str, count_all_zeros: bool)->int:
     zero_count = 0
 
-    with open(path, 'r', encoding='utf-8-sig') as input_file:
+    with open(input_path, 'r', encoding='utf-8-sig') as input_file:
         dial = 50
         for instruction in input_file.read().splitlines():
             direction = instruction[0]
@@ -22,7 +23,9 @@
                 zero_count += 1
     return zero_count
 
+
 if __name__ == '__main__':
+    print("-----DAY 01-----")
     print("Examples:")
     print(f'Part1: {day1("inputs/day01_test", False)}')
     print(f'Part2: {day1("inputs/day01_test", True)}')

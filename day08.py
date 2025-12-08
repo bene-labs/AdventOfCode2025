@@ -1,11 +1,13 @@
-﻿import math
+﻿from math import dist
 from itertools import combinations
+
 
 class Connection:
     def __init__(self, p1, p2):
         self.point1 = p1
         self.point2 = p2
-        self.distance = math.dist(p1, p2)
+        self.distance = dist(p1, p2)
+
 
 def day8_part1(input_path: str, max_connections: int = 1000)->int:
     box_coordinates : list[tuple[int] | str] = []
@@ -97,10 +99,6 @@ def day8_part2(input_path: str) -> int:
         if len(circuits) == 1 and circuits[0] == unique_box_coordinates:
             return p1[0] * p2[0]
     return -1
-        
-    
-    
-    
 
 
 if __name__ == '__main__':

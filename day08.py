@@ -57,12 +57,11 @@ def day8_part1(input_path: str, max_connections: int = 1000)->int:
 
 
 def day8_part2(input_path: str) -> int:
-    box_coordinates: list[tuple[int] | str] = []
+    box_coordinates: list[tuple[int]] = []
 
     with open(input_path, 'r', encoding='utf-8-sig') as input_file:
-        box_coordinates = input_file.read().splitlines()
-        for i in range(len(box_coordinates)):
-            box_coordinates[i] = tuple(int(pos) for pos in box_coordinates[i].split(','))
+        for coordinate in input_file.read().splitlines():
+            box_coordinates.append(tuple[int](int(pos) for pos in coordinate.split(',')))
 
     connections: list[Connection] = []
     unique_box_coordinates = set(box_coordinates)

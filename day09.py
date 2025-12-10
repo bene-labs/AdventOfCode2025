@@ -1,4 +1,4 @@
-﻿from enum import Enum, Flag, auto
+﻿from enum import Flag, auto
 from itertools import combinations
 from math import dist
 
@@ -76,11 +76,15 @@ def day9_part1(input_path: str)->int:
 
 
 def is_rect_in_area(top_corner, bottom_corner, horizontal_area_edges, vertical_area_edges, x_corner_map, y_corner_map):
+    min_x, max_x = sorted([top_corner[0], bottom_corner[0]])
+    min_y = top_corner[1]
+    max_y = bottom_corner[1]
+    
     rect_edges = [
-        (Line(top_corner, (bottom_corner[0], top_corner[1])), Direction.Down),
-        (Line(top_corner, (top_corner[0], bottom_corner[1])), Direction.Right),
-        (Line((bottom_corner[0], top_corner[1]), bottom_corner), Direction.Left),
-        (Line((top_corner[0], bottom_corner[1]), bottom_corner), Direction.Up),
+        (Line((min_x, min_y), (max_x, min_y)), Direction.Down),
+        (Line((min_x, min_y), (min_x, max_y)), Direction.Right),
+        (Line((max_x, min_y), (max_x, max_y)), Direction.Left),
+        (Line((min_x, max_y), (max_x, max_y)), Direction.Up),
     ]
     for rect_edge, concave_direction in rect_edges:
         if rect_edge.is_vertical():
@@ -102,12 +106,11 @@ def is_rect_in_area(top_corner, bottom_corner, horizontal_area_edges, vertical_a
 
 
 def day9_part2(input_path: str) -> int:
-    corner_coordinates: list[tuple[int]] = []
-    floor_dimension = [0, 0]
-    
+    corner_coordinates: list[tuple[int, int]] = []
+
     with open(input_path, 'r', encoding='utf-8') as input_file:
         for coordinate in input_file.read().splitlines():
-            new_corner_cord = (tuple[int](int(pos) for pos in coordinate.split(',')))
+            new_corner_cord = (tuple[int, int](int(pos) for pos in coordinate.split(',')))
             corner_coordinates.append(new_corner_cord)
 
     horizontal_area_edges, vertical_area_edges, x_corner_map, y_corner_map = ([], [], {}, {})
@@ -139,20 +142,24 @@ def day9_part2(input_path: str) -> int:
             y_corner_map[corner.y].append(corner)
         else:
             y_corner_map[corner.y] = [corner]
-
+    
     corner_coordinates.sort(key=lambda cord: (cord[1], cord[0]))
     biggest_area = 0
     
     for top_corner, bottom_corner in combinations(corner_coordinates, 2):
-        if bottom_corner[1] <= top_corner[1] or bottom_corner[0] <= top_corner[0]:
+        if bottom_corner[1] <= top_corner[1]:
             continue
         if not is_rect_in_area(top_corner, bottom_corner,  horizontal_area_edges, vertical_area_edges, x_corner_map, y_corner_map):
             continue
-       
-        rect_area = (bottom_corner[0] - top_corner[0] + 1) * (bottom_corner[1] - top_corner[1] + 1)
+
+        min_x, max_x = sorted([top_corner[0], bottom_corner[0]])
+        min_y = top_corner[1]
+        max_y = bottom_corner[1]
+        rect_area = (max_x - min_x + 1) * (max_y - min_y + 1)
         if rect_area > biggest_area:
-            print( f"{top_corner}-{bottom_corner} == {rect_area}")
+            # print( f"{top_corner}-{bottom_corner} == {rect_area}")
             biggest_area = rect_area
+            
                     
     return biggest_area
 
@@ -161,9 +168,9 @@ if __name__ == '__main__':
     print("-----DAY 09----")
     print("Examples:")
     print(f'Part1: {day9_part1("inputs/day09_test")}')
-   
     print(f'Part2: {day9_part2("inputs/day09_test")}')
     print('----')
     print("Solutions:")
     print(f'Part1: {day9_part1("inputs/day09")}')
     print(f'Part2: {day9_part2("inputs/day09")}')
+   

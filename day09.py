@@ -152,12 +152,8 @@ def day9_part2(input_path: str) -> int:
         if not is_rect_in_area(top_corner, bottom_corner,  horizontal_area_edges, vertical_area_edges, x_corner_map, y_corner_map):
             continue
 
-        min_x, max_x = sorted([top_corner[0], bottom_corner[0]])
-        min_y = top_corner[1]
-        max_y = bottom_corner[1]
-        rect_area = (max_x - min_x + 1) * (max_y - min_y + 1)
+        rect_area = (abs(top_corner[0] - bottom_corner[0]) + 1) * (abs(top_corner[1] - bottom_corner[1]) + 1)
         if rect_area > biggest_area:
-            # print( f"{top_corner}-{bottom_corner} == {rect_area}")
             biggest_area = rect_area
             
                     
